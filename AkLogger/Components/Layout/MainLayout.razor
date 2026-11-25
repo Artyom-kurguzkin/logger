@@ -1,0 +1,87 @@
+@inherits AkLayout
+@implements IDisposable
+
+@* The window: the side menu, the pane(s) and the dialogs. A pane draws the view its own address names (PaneHost); Body is not used. *@
+<SideNav />
+@if (Panes.All.Count == 1)
+{
+    <main><PaneHost Pane="Panes.Active" /></main>
+}
+else
+{
+    @* Split: each pane is its own page by its own address; a pointer-down or focus in a pane makes it the active one before its click runs. *@
+    <main class="panes">
+        @foreach (Pane pane in Panes.All)
+        {
+            <section @key="pane" class="pane @(pane == Panes.Active ? "active" : "")" data-pane="@Panes.Number(pane)" @onpointerdown="() => Panes.Activate(pane)" @onfocusin="() => Panes.Activate(pane)">
+                <PaneHost Pane="pane" />
+            </section>
+        }
+    </main>
+}
+<Overlays />
+
+@code {
+    [Inject] private NavigationManager Nav { get; set; } = default!;
+    [Inject] private SettingsStore Settings { get; set; } = default!;
+    [Inject] private UiService Popups { get; set; } = default!;
+    [Inject] private IJSRuntime Js { get; set; } = default!;
+
+    private bool systemDark;
+    private DotNetObjectReference<MainLayout>? self;
+
+    private Panes Panes => Popups.Panes;
+
+    /// <summary>The window's address, base-relative ("" for the start page, settings ...).</summary>
+    private string CurrentPath => Nav.ToBaseRelativePath(Nav.Uri);
+
+    protected override void OnInitialized()
+    {
+        Nav.LocationChanged += OnLocation;
+        Panes.Changed += OnPanes;
+        Panes.Navigate(Panes.Active, CurrentPath);
+        Settings.Changed += OnSettings;
+    }
+
+    /// <summary>The window's address follows the active pane: a navigation through Nav lands in it.</summary>
+    private void OnLocation(object? sender, LocationChangedEventArgs e)
+    {
+        Panes.Navigate(Panes.Active, CurrentPath);
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>A pane was added, closed, activated or moved: the address goes to the active pane's, and the layout draws.</summary>
+    private void OnPanes() => InvokeAsync(() =>
+    {
+        if (Panes.Active.Path != CurrentPath) Nav.NavigateTo(Panes.Active.Path, replace: true);
+        StateHasChanged();
+    });
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        self = DotNetObjectReference.Create(this);
+        systemDark = await Js.InvokeAsync<bool>("ak.watchDark", self);   // current OS setting + notify on change
+        await ApplyTheme();
+    }
+
+    [JSInvokable]
+    public Task SystemDarkChanged(bool isDark)
+    {
+        systemDark = isDark;
+        return InvokeAsync(ApplyTheme);
+    }
+
+    private void OnSettings() => InvokeAsync(ApplyTheme);
+
+    /// <summary>Theme comes from Settings (Light / Dark / System); the CSS tokens switch on html[data-theme].</summary>
+    private Task ApplyTheme() => Js.InvokeVoidAsync("ak.setTheme", Settings.Current.Theme).AsTask();
+
+    public void Dispose()
+    {
+        Settings.Changed -= OnSettings;
+        Panes.Changed -= OnPanes;
+        Nav.LocationChanged -= OnLocation;
+        self?.Dispose();
+    }
+}

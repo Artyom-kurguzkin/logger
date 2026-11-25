@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "excalidraw": {
+      "type": "http",
+      "url": "https://api.excalidraw.com/api/v1/mcp"
+    },
+    "tasks-manager": {
+      "type": "http",
+      "url": "http://127.0.0.1:7431/mcp"
+    }
+  }
+}

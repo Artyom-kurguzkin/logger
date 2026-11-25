@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The contract extensions are written against. Depends on nothing of the host (ModuleBoundaryTests). -->
+</Project>

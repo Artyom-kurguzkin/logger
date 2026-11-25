@@ -1,0 +1,15 @@
+@inject SettingsStore Settings
+
+<div class="sheet" data-sk>
+    <div class="head"><h2>Settings</h2></div>
+    <div class="kv">
+        <label>Theme</label>
+        <Seg Name="theme" Options="Themes" Value="@Settings.Current.Theme" ValueChanged="SetTheme" />
+    </div>
+</div>
+
+@code {
+    private static readonly IReadOnlyList<(string Value, string Label)> Themes = [("light", "Light"), ("dark", "Dark"), ("system", "System")];
+
+    private void SetTheme(string theme) => Settings.Update(s => s with { Theme = theme });
+}

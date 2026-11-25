@@ -1,0 +1,39 @@
+@inherits AkComponent
+@implements IDisposable
+@inject Extensions Extensions
+@inject SettingsStore Settings
+@inject NavigationManager Nav
+@inject UiService Popups
+@* Left icon rail, one button per view the registry lists (Extensions.NavViews); the menu icon expands it to labels.
+   On narrow windows the same markup lays out as a top header bar (see app.css "nav"). Buttons, not links: WebView2 shows a "localhost/…" bubble when hovering links. *@
+<nav class="side @(expanded ? "expanded" : "")">
+    <button class="nav-btn nav-toggle" aria-label="Menu" aria-expanded="@(expanded ? "true" : "false")" title="@(expanded ? "Collapse menu" : "Expand menu")"
+            @onclick="ToggleMenu">@Ui.Icon("menu")</button>
+    @foreach (ViewDescriptor view in Extensions.NavViews)
+    {
+        <button class="nav-btn @(IsCurrent(view) ? "is-sel" : "")" aria-label="@view.Title" title="@view.Title" @onclick="() => Nav.NavigateTo(view.Route)">@Ui.PathIcon(view.Icon)<span class="nav-l">@view.Title</span></button>
+    }
+</nav>
+
+@code {
+    private bool expanded => Settings.Current.MenuExpanded;
+
+    private bool IsCurrent(ViewDescriptor view) =>
+        string.Equals(Popups.Panes.Active.Path.Split('?', '#')[0].Trim('/').Split('/')[0], view.Route.Trim('/'), StringComparison.OrdinalIgnoreCase);
+
+    private void ToggleMenu() => Settings.Update(s => s with { MenuExpanded = !s.MenuExpanded });
+
+    protected override void OnInitialized()
+    {
+        Settings.Changed += Redraw;
+        Popups.Panes.Changed += Redraw;
+    }
+
+    private void Redraw() => Invalidate();
+
+    public void Dispose()
+    {
+        Settings.Changed -= Redraw;
+        Popups.Panes.Changed -= Redraw;
+    }
+}

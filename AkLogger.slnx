@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AkLogger.Sdk/AkLogger.Sdk.csproj" />
+  <Project Path="AkLogger.Tests/AkLogger.Tests.csproj" />
+  <Project Path="AkLogger/AkLogger.csproj" />
+</Solution>

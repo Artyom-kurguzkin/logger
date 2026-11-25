@@ -1,0 +1,6 @@
+@page "/{*path}"
+@* The one routed page: every address lands here, and the layout's panes (PaneHost) draw the view the registry names for it. Built-in and extension views take the same path. *@
+
+@code {
+    [Parameter] public string? Path { get; set; }
+}

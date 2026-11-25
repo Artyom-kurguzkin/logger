@@ -1,0 +1,14 @@
+schema: spec-driven
+created: 2026-11-25
+x-rtm:
+  id: 2
+  title: App skeleton with extension registry
+  status: In Review
+  contributors: [Claude]
+  features: [app-shell]
+  label: feature
+  plan: DevResources/plans/extensible-architecture-2026-11-25.md
+  started: 2026-11-25
+  moved: 2026-11-25
+  agentBy: Claude
+  agentAt: 2026-11-25T08:00:38

@@ -1,0 +1,14 @@
+schema: spec-driven
+created: 2026-11-25
+x-rtm:
+  id: 3
+  title: Log store, file source and log list
+  status: Blocked
+  contributors: [Claude]
+  features: [log-explorer]
+  label: feature
+  plan: DevResources/plans/extensible-architecture-2026-11-25.md
+  dependsOn: [2]
+  moved: 2026-11-25
+  agentBy: Claude
+  agentAt: 2026-11-25T10:02:35

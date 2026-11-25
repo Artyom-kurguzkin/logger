@@ -1,0 +1,14 @@
+@inject SpikeState S
+@inject IJSRuntime JS
+<h2>ak-logger spike host</h2>
+<pre id="status">@S.Summary</pre>
+<iframe id="extframe" sandbox="allow-scripts" src="@S.PanelUrl" style="width:620px;height:240px;border:1px solid #888"></iframe>
+<p><button id="exit" @onclick="S.RequestExit">exit host</button></p>
+@code {
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (first) await JS.InvokeVoidAsync("spike.init", DotNetObjectReference.Create(this));
+    }
+    [JSInvokable] public Task<string> CallTool(string name, string argsJson) => S.CallToolAsync(name, argsJson);
+    [JSInvokable] public void ViewEvent(string text) => S.Log("e", text);
+}

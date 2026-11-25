@@ -1,0 +1,20 @@
+@inherits AkComponent
+@inject Extensions Extensions
+@* One pane's page: the view the registry says owns the first segment of the pane's address. The pane is cascaded to the page.
+   ponytail: the rest of the address is not passed on; a view that needs sub-paths gets a route parameter when one asks. *@
+<CascadingValue Value="Pane" IsFixed="true">
+    @if (View?.Component is { } component)
+    {
+        <DynamicComponent Type="component" />
+    }
+    else
+    {
+        <NoSuchView />   @* ponytail: a view with only a ResourceUri (an extension's page) has no frame to draw it in until the extension step *@
+    }
+</CascadingValue>
+
+@code {
+    [Parameter, EditorRequired] public Pane Pane { get; set; } = default!;
+
+    private ViewDescriptor? View => Extensions.FindView(Pane.Path.Split('?', '#')[0].Trim('/').Split('/')[0]);
+}

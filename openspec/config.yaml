@@ -1,0 +1,11 @@
+schema: spec-driven
+
+# What this repository is, for the agents that work in it (see openspec/REPO-TASKS.md).
+context: |
+  ak-logger.
+
+x-rtm:
+  features:
+    - app-shell
+    - log-explorer
+    - extensions

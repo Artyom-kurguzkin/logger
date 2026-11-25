@@ -1,0 +1,14 @@
+schema: spec-driven
+created: 2026-11-25
+x-rtm:
+  id: 5
+  title: OTLP receiver, traces, queries, graphs and alerts
+  status: Blocked
+  contributors: [Claude]
+  features: [log-explorer]
+  label: feature
+  plan: DevResources/plans/extensible-architecture-2026-11-25.md
+  dependsOn: [3]
+  moved: 2026-11-25
+  agentBy: Claude
+  agentAt: 2026-11-25T10:04:30

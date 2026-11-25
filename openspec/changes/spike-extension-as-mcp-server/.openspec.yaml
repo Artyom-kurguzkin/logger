@@ -1,0 +1,14 @@
+schema: spec-driven
+skip_specs: true
+created: 2026-11-25
+x-rtm:
+  id: 1
+  title: "Spike: extension as MCP server with MCP App UI"
+  status: In Review
+  contributors: [Claude]
+  label: feature
+  plan: DevResources/plans/extensible-architecture-2026-11-25.md
+  started: 2026-11-25
+  moved: 2026-11-25
+  agentBy: Claude
+  agentAt: 2026-11-25T08:00:38

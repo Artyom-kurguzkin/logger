@@ -1,0 +1,13 @@
+<Project>
+  <!-- Shared by every project. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>0.1.0</Version>
+    <!-- release builds (dist/) ship without debug symbols -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+  </PropertyGroup>
+  <!-- ponytail: add Nerdbank.GitVersioning once the repo is under git (it needs a git repo; the reference sets it up with version.json + a PackageReference here) -->
+</Project>
